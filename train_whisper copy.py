@@ -1,8 +1,10 @@
 import os
 import argparse
 import pandas as pd
+import torchaudio
 from datasets import Dataset, Audio
 from transformers import WhisperProcessor, WhisperForConditionalGeneration, TrainingArguments, Trainer
+from transformers import DataCollatorWithPadding
 
 
 def parse_args():
@@ -22,8 +24,7 @@ def main():
     df = pd.read_csv(args.csv)
     df["file"] = df["file"].apply(lambda x: os.path.join(args.audio_dir, x))
     dataset = Dataset.from_pandas(df)
-    dataset = dataset.cast_column("file", Audio(sampling_rate=16000, decode=True, decode_with_torchaudio=True))
-
+    dataset = dataset.cast_column("file", Audio(sampling_rate=16000))
 
     # Load model and processor
     processor = WhisperProcessor.from_pretrained(args.model, language="turkmen", task="transcribe")
