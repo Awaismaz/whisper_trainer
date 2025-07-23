@@ -22,7 +22,7 @@ def main():
     df = pd.read_csv(args.csv)
     df["file"] = df["file"].apply(lambda x: os.path.join(args.audio_dir, x))
     dataset = Dataset.from_pandas(df)
-    dataset = dataset.cast_column("file", Audio(sampling_rate=16000, decode=True, decode_with_torchaudio=True))
+    dataset = dataset.cast_column("file", Audio(sampling_rate=16000))
 
 
     # Load model and processor
